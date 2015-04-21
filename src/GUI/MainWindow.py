@@ -9,6 +9,7 @@ from tkinter import *
 from tkinter.ttk import *
 from CryptoLabs.TextMasking import maskText, multMaskText
 from GUI.SubstituteWindow import SubstituteWindow
+from GUI.StatsWindow import StatsWindow
 
 class MainWindow(Frame):
     def __init__(self, parent):
@@ -16,6 +17,7 @@ class MainWindow(Frame):
         self.parent = parent
         self.textData= ''
         self.subsituteForm = None
+        self.statsForm = None
         self.subsituteDict = {'а':StringVar(),
                               'б':StringVar(),
                               'в':StringVar(),
@@ -53,6 +55,7 @@ class MainWindow(Frame):
         self.createGUI()
         self.loadText()
         self.loadSubstituteForm()
+        self.loadStatsForm()
     def createGUI(self):
         self.initTextArea = Frame(self, height = 50, width = 300)
         self.textArea = Frame(self, height = 50, width = 300)
@@ -84,9 +87,15 @@ class MainWindow(Frame):
             self.subsituteDict[key].set('*')
         self.subsituteForm = Toplevel()
         self.subsituteForm.protocol("WM_DELETE_WINDOW", self.onClose)
-        self.s = SubstituteWindow(self.subsituteForm, self.subsituteDict, self.textData)
-        self.s.showStats()
-        self.s.pack()
+        subst = SubstituteWindow(self.subsituteForm, self.subsituteDict, self.textData)
+        subst.showStats()
+        subst.pack()
+    def loadStatsForm(self):
+        self.statsForm = Toplevel()
+        self.statsForm.protocol("WM_DELETE_WINDOW", self.onClose)
+        stats = StatsWindow(self.statsForm, self.textData)
+        stats.pack()
+                
     def printDict(self):
         for i in sorted(self.subsituteDict):
             print(i, self.subsituteDict[i].get())

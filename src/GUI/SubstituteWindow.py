@@ -11,7 +11,7 @@ class SubstituteWindow(Frame):
     def __init__(self, parent, substituteDict, textData = ''):
         Frame.__init__(self, parent)
         self.substituteDict = substituteDict
-        self.initText = textData
+        self.textData = textData
         self.substituteFields ={}
         self.createGUI()
         
@@ -29,10 +29,10 @@ class SubstituteWindow(Frame):
     
     def showStats(self):
         row = 0
-        if self.initText != '':
+        if self.textData != '':
             for key in sorted(self.substituteDict):
                 label = Label(self)
-                labelText = str(self.initText.count(str(key)))
+                labelText = str(self.textData.count(str(key)))
                 label.config(text = labelText)
                 label.grid(row = row, column = 2)
                 row+=1
