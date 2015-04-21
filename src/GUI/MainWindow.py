@@ -84,7 +84,8 @@ class MainWindow(Frame):
             self.subsituteDict[key].set('*')
         self.subsituteForm = Toplevel()
         self.subsituteForm.protocol("WM_DELETE_WINDOW", self.onClose)
-        self.s = SubstituteWindow(self.subsituteForm, self.subsituteDict)
+        self.s = SubstituteWindow(self.subsituteForm, self.subsituteDict, self.textData)
+        self.s.showStats()
         self.s.pack()
     def printDict(self):
         for i in sorted(self.subsituteDict):

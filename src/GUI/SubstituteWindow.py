@@ -8,9 +8,10 @@ from tkinter import *
 from tkinter.ttk import *
 
 class SubstituteWindow(Frame):
-    def __init__(self, parent, substituteDict):
+    def __init__(self, parent, substituteDict, textData = ''):
         Frame.__init__(self, parent)
         self.substituteDict = substituteDict
+        self.initText = textData
         self.substituteFields ={}
         self.createGUI()
         
@@ -20,12 +21,22 @@ class SubstituteWindow(Frame):
             label = Label(self, text = key)
             label.grid(row = row, column = 0)
             #self.substituteDict[key].trace('w', self.entryupdate)
-            self.substituteFields[key] = Entry(self, width = 30, textvariable = self.substituteDict[key])
+            self.substituteFields[key] = Entry(self, width = 3, textvariable = self.substituteDict[key])
             self.substituteFields[key].grid(row = row, column = 1)
             row+=1
     #def entryupdate(self, *args):
     #        print(self.substituteDict['а'].get())
-
+    
+    def showStats(self):
+        row = 0
+        if self.initText != '':
+            for key in sorted(self.substituteDict):
+                label = Label(self)
+                labelText = str(self.initText.count(str(key)))
+                label.config(text = labelText)
+                label.grid(row = row, column = 2)
+                row+=1
+                
 if __name__ == '__main__':
     root = Tk()
     subst = {'а':StringVar(),
