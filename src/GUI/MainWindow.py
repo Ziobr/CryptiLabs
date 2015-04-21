@@ -7,36 +7,101 @@ Created on 03 апр. 2015 г.
 import codecs
 from tkinter import *
 from tkinter.ttk import *
-from CryptoLabs.TextMasking import maskText
+from CryptoLabs.TextMasking import maskText, multMaskText
+from GUI.SubstituteWindow import SubstituteWindow
 
 class MainWindow(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
+        self.parent = parent
+        self.textData= ''
+        self.subsituteForm = None
+        self.subsituteDict = {'а':StringVar(),
+                              'б':StringVar(),
+                              'в':StringVar(),
+                              'г':StringVar(),
+                              'д':StringVar(),
+                              'е':StringVar(),
+                              'ё':StringVar(),
+                              'ж':StringVar(),
+                              'з':StringVar(),
+                              'и':StringVar(),
+                              'й':StringVar(),
+                              'к':StringVar(),
+                              'л':StringVar(),
+                              'м':StringVar(),
+                              'н':StringVar(),
+                              'о':StringVar(),
+                              'п':StringVar(),
+                              'р':StringVar(),
+                              'с':StringVar(),
+                              'т':StringVar(),
+                              'у':StringVar(),
+                              'ф':StringVar(),
+                              'х':StringVar(),
+                              'ц':StringVar(),
+                              'ч':StringVar(),
+                              'ш':StringVar(),
+                              'щ':StringVar(),
+                              'ъ':StringVar(),
+                              'ы':StringVar(),
+                              'ь':StringVar(),
+                              'э':StringVar(),
+                              'ю':StringVar(),
+                              'я':StringVar(),
+                              }
         self.createGUI()
+        self.loadText()
+        self.loadSubstituteForm()
     def createGUI(self):
-        self.inputReplaceWhat = Entry(self, width = 10)
-        self.inputReplaceTo = Entry(self, width = 10)
         self.initTextArea = Frame(self, height = 50, width = 300)
         self.textArea = Frame(self, height = 50, width = 300)
         self.initText = Text(self.initTextArea, wrap=CHAR, state = DISABLED)
         self.initText.pack()
         self.text = Text(self.textArea, wrap=CHAR, state = DISABLED)
         self.text.pack()
-        #self.scrollbar = Scrollbar(self.textArea)
-        self.loadButton = Button(self, text = 'Загрузить', command = self.dummyFunc)
-        self.inputReplaceWhat.grid(row = 1, column = 1)
-        self.inputReplaceTo.grid(row = 1, column = 2)
-        self.initTextArea.grid(row = 2, column = 1)
-        self.textArea.grid(row = 2, column = 2)
-        self.loadButton.grid(row = 3, column = 1)
-    def dummyFunc(self):
-        f = codecs.open('..\..\Шифр.txt', 'r', 'utf-8')
-        text = f.read()
+        self.scrollbar = Scrollbar(self.textArea)
+        self.loadButton = Button(self, text = 'Заменить', command = self.dummyFunc)
+        self.resetButton = Button(self, text = 'Сбросить', command = self.resetData)
+        self.initTextArea.grid(row = 1, column = 1)
+        self.textArea.grid(row = 1, column = 2)
+        self.loadButton.grid(row = 2, column = 1)
+        self.resetButton.grid(row = 2, column = 2)
+        self.parent.protocol("WM_DELETE_WINDOW", self.onClose)
+    def onClose(self):
+        self.subsituteForm.quit()
+        self.quit()
+        self.parent.quit()
+    def loadText(self):
+        f = codecs.open('..\data\code.txt', 'r', 'utf-8')
+        self.textData = f.read()
         self.initText.config(state = NORMAL)
         self.initText.delete(1.0, END)
-        self.initText.insert(1.0, text)
+        self.initText.insert(1.0, self.textData)
         self.initText.config(state = DISABLED)
-        self.resultText = maskText(text, self.inputReplaceWhat.get(), self.inputReplaceTo.get())
+    def loadSubstituteForm(self):
+        for key in self.subsituteDict.keys():
+            self.subsituteDict[key].set('*')
+        self.subsituteForm = Toplevel()
+        self.subsituteForm.protocol("WM_DELETE_WINDOW", self.onClose)
+        self.s = SubstituteWindow(self.subsituteForm, self.subsituteDict)
+        self.s.pack()
+    def printDict(self):
+        for i in sorted(self.subsituteDict):
+            print(i, self.subsituteDict[i].get())
+    def resetData(self):
+        for i in self.s.substituteFields:
+            self.s.substituteFields[i].delete(0, END)
+            self.s.substituteFields[i].insert(0, "*")
+        self.dummyFunc()
+    def dummyFunc(self):
+        intab = ''
+        outtab = ''
+        for i in sorted(self.subsituteDict):
+            intab = intab + i
+            outtab = outtab + self.subsituteDict[i].get()
+        self.resultText = multMaskText(self.textData, intab, outtab)
+        #self.resultText = maskText(self.textData, self.inputReplaceWhat.get(), self.inputReplaceTo.get())
         self.text.config(state = NORMAL)
         self.text.delete(1.0, END)
         self.text.insert(1.0, self.resultText)
