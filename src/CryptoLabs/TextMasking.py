@@ -5,7 +5,6 @@ Created on 02 апр. 2015 г.
 @author: Ziobr
 '''
 import codecs
-from tkinter import *
 
 def maskText(text='', symbolForReplace='', symbolToShow=''):
     intab = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'

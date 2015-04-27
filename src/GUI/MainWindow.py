@@ -10,6 +10,8 @@ from tkinter.ttk import *
 from CryptoLabs.TextMasking import maskText, multMaskText
 from GUI.SubstituteWindow import SubstituteWindow
 from GUI.StatsWindow import StatsWindow
+from GUI.DiGraphsWindow import DiGraphsWindow
+from GUI.TriGraphsWindow import TriGraphsWindow
 
 class MainWindow(Frame):
     def __init__(self, parent):
@@ -56,6 +58,8 @@ class MainWindow(Frame):
         self.loadText()
         self.loadSubstituteForm()
         self.loadStatsForm()
+        self.showDiGraphs()
+        self.showTriGraphs()
     def createGUI(self):
         self.initTextArea = Frame(self, height = 50, width = 300)
         self.textArea = Frame(self, height = 50, width = 300)
@@ -82,16 +86,30 @@ class MainWindow(Frame):
         self.initText.delete(1.0, END)
         self.initText.insert(1.0, self.textData)
         self.initText.config(state = DISABLED)
+    def showDiGraphs(self):
+        self.diGraphsForm = Toplevel()
+        self.diGraphsForm.wm_title('Биграммы')
+        self.diGraphsForm.protocol("WM_DELETE_WINDOW", self.onClose)
+        diGraphs = DiGraphsWindow(self.diGraphsForm, self.textData)
+        diGraphs.pack()  
+    def showTriGraphs(self):
+        self.triGraphsForm = Toplevel()
+        self.triGraphsForm.wm_title('Триграммы')
+        self.triGraphsForm.protocol("WM_DELETE_WINDOW", self.onClose)
+        triGraphs = TriGraphsWindow(self.triGraphsForm, self.textData)
+        triGraphs.pack()  
     def loadSubstituteForm(self):
         for key in self.subsituteDict.keys():
             self.subsituteDict[key].set('*')
         self.subsituteForm = Toplevel()
+        self.subsituteForm.wm_title('Замена')
         self.subsituteForm.protocol("WM_DELETE_WINDOW", self.onClose)
         subst = SubstituteWindow(self.subsituteForm, self.subsituteDict, self.textData)
         subst.showStats()
         subst.pack()
     def loadStatsForm(self):
         self.statsForm = Toplevel()
+        self.statsForm.wm_title('Статистика')
         self.statsForm.protocol("WM_DELETE_WINDOW", self.onClose)
         stats = StatsWindow(self.statsForm, self.textData)
         stats.pack()
@@ -119,6 +137,8 @@ class MainWindow(Frame):
 
 if __name__ == '__main__':
     root = Tk()
+    root.wm_title('Шифр')
+    root.resizable(0,0)
     b = MainWindow(root)
     b.pack()
     root.mainloop()    
