@@ -12,6 +12,8 @@ def maskText(text='', symbolForReplace='', symbolToShow=''):
     for s in intab:
         if s == symbolForReplace:
             outtab = outtab + symbolToShow
+        elif s == " ":
+            outtab = outtab + ""
         else:
             outtab = outtab + '*'
     translationTab = str.maketrans(intab, outtab)

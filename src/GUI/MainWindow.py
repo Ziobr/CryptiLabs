@@ -63,9 +63,9 @@ class MainWindow(Frame):
     def createGUI(self):
         self.initTextArea = Frame(self, height = 50, width = 300)
         self.textArea = Frame(self, height = 50, width = 300)
-        self.initText = Text(self.initTextArea, wrap=CHAR, state = DISABLED)
+        self.initText = Text(self.initTextArea, wrap=CHAR)#, state = DISABLED)
         self.initText.pack()
-        self.text = Text(self.textArea, wrap=CHAR, state = DISABLED)
+        self.text = Text(self.textArea, wrap=CHAR)#, state = DISABLED)
         self.text.pack()
         self.scrollbar = Scrollbar(self.textArea)
         self.loadButton = Button(self, text = 'Заменить', command = self.dummyFunc)
@@ -85,7 +85,7 @@ class MainWindow(Frame):
         self.initText.config(state = NORMAL)
         self.initText.delete(1.0, END)
         self.initText.insert(1.0, self.textData)
-        self.initText.config(state = DISABLED)
+        #self.initText.config(state = DISABLED)
     def showDiGraphs(self):
         self.diGraphsForm = Toplevel()
         self.diGraphsForm.wm_title('Биграммы')
@@ -104,9 +104,9 @@ class MainWindow(Frame):
         self.subsituteForm = Toplevel()
         self.subsituteForm.wm_title('Замена')
         self.subsituteForm.protocol("WM_DELETE_WINDOW", self.onClose)
-        subst = SubstituteWindow(self.subsituteForm, self.subsituteDict, self.textData)
-        subst.showStats()
-        subst.pack()
+        self.subst = SubstituteWindow(self.subsituteForm, self.subsituteDict, self.textData)
+        self.subst.showStats()
+        self.subst.pack()
     def loadStatsForm(self):
         self.statsForm = Toplevel()
         self.statsForm.wm_title('Статистика')
@@ -118,9 +118,9 @@ class MainWindow(Frame):
         for i in sorted(self.subsituteDict):
             print(i, self.subsituteDict[i].get())
     def resetData(self):
-        for i in self.s.substituteFields:
-            self.s.substituteFields[i].delete(0, END)
-            self.s.substituteFields[i].insert(0, "*")
+        for i in self.subst.substituteFields:
+            self.subst.substituteFields[i].delete(0, END)
+            self.subst.substituteFields[i].insert(0, "*")
         self.dummyFunc()
     def dummyFunc(self):
         intab = ''
@@ -128,6 +128,7 @@ class MainWindow(Frame):
         for i in sorted(self.subsituteDict):
             intab = intab + i
             outtab = outtab + self.subsituteDict[i].get()
+        self.textData = self.initText.get(1.0, END)
         self.resultText = multMaskText(self.textData, intab, outtab)
         #self.resultText = maskText(self.textData, self.inputReplaceWhat.get(), self.inputReplaceTo.get())
         self.text.config(state = NORMAL)
