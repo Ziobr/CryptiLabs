@@ -18,7 +18,6 @@ class TriGraphsWindow(Frame):
         scrollbar = Scrollbar(self.parent)
         scrollbar.pack(side = RIGHT, fill = Y)
         listbox = Listbox(self.parent, yscrollcommand=scrollbar.set, width = 10)
-        row = 0
         for w in sorted(self.statsDict, key=self.statsDict.get, reverse=True):
             listbox.insert(END, w + ':' + str(self.statsDict[w]))
         listbox.pack(side=LEFT, fill=BOTH)

@@ -16,26 +16,26 @@ class SubstituteWindow(Frame):
         self.createGUI()
         
     def createGUI(self):
-        row = 0
+        col = 0
         for key in sorted(self.substituteDict):
             label = Label(self, text = key)
-            label.grid(row = row, column = 0)
+            label.grid(row = 0, column = col)
             #self.substituteDict[key].trace('w', self.entryupdate)
             self.substituteFields[key] = Entry(self, width = 3, textvariable = self.substituteDict[key])
-            self.substituteFields[key].grid(row = row, column = 1)
-            row+=1
+            self.substituteFields[key].grid(row = 1, column = col)
+            col+=1
     #def entryupdate(self, *args):
     #        print(self.substituteDict['а'].get())
     
     def showStats(self):
-        row = 0
+        col = 0
         if self.textData != '':
             for key in sorted(self.substituteDict):
                 label = Label(self)
                 labelText = str(self.textData.count(str(key)))
                 label.config(text = labelText)
-                label.grid(row = row, column = 2)
-                row+=1
+                label.grid(row = 2, column = col)
+                col+=1
                 
 if __name__ == '__main__':
     root = Tk()
